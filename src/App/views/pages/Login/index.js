@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { LoginManager } from 'react-native-fbsdk'
+import Icon from 'react-native-vector-icons/FontAwesome'
 import { KeyboardAvoidingView, Image, Dimensions, Alert } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { styles } from '../../../assets/styles'
@@ -13,27 +15,42 @@ const Container = styled.View`
   align-items: center;
   justify-content: center;
 `
-const Input = styled.TextInput`
-  background-color: rgba(225, 225, 225, 0.2);
-  margin-bottom: 10px;
-  padding: 10px;
-  color: #fff;
-  width: 250px;
-  height: 50px;
-  border-radius: 30px;
+const LogoImage = styled(Image)`
+  width: 120px;
+  height: 120px;
+  margin-bottom: 50px;
 `
-const Button = styled.TouchableOpacity`
-  width: 250px;
+const Input = styled.TextInput`
+  color: #fff;
+  width: 300px;
   height: 50px;
-  padding: 15px;
-  border-radius: 30px;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  border-radius: 50px;
+  background-color: rgba(225, 225, 225, 0.2);
+`
+
+const Button = styled.TouchableOpacity`
+  width: 300px;
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 50px;
   border: 1px solid #fff;
+  justify-content: center;
   background-color: transparent;
 `
 const ButtonText = styled.Text`
   color: #fff;
-  font-size: 15px;
+  font-size: 18px;
   text-align: center;
+`
+const FacebookButton = styled(Button)`
+  border: 0;
+  margin-top: 20px;
+  text-align: center;
+  background-color: #3b5998;
 `
 const Login = ({ loginToReducer }) => {
   const [userName, setUserName] = useState('')
@@ -60,6 +77,21 @@ const Login = ({ loginToReducer }) => {
     }
   }
 
+  handleFaceBook = () => {
+    LoginManager.logInWithReadPermissions(['public_profile']).then(
+      result => {
+        if (result.isCancelled) {
+          console.log('Login cancelled')
+        } else {
+          console.log(`Login success with permissions:  ${result.grantedPermissions.toString()}`)
+        }
+      },
+      error => {
+        console.log(`Login fail with error: ${error}`)
+      }
+    )
+  }
+
   return (
     <LinearGradient
       style={[
@@ -74,7 +106,7 @@ const Login = ({ loginToReducer }) => {
     >
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
         <Container>
-          <Image source={require('../../../assets/images/logo.png')} style={{ margin: 50 }} />
+          <LogoImage source={require('../../../assets/images/logo.png')} />
           <Input
             value={userName}
             autoCorrect={false}
@@ -99,6 +131,10 @@ const Login = ({ loginToReducer }) => {
           <Button text="Login" onPress={handleClick}>
             <ButtonText>Login</ButtonText>
           </Button>
+          <FacebookButton onPress={handleFaceBook}>
+            <Icon name="facebook" size={30} style={{ marginRight: 10 }} color={'white'} />
+            <ButtonText>Continue with Facebook</ButtonText>
+          </FacebookButton>
         </Container>
       </KeyboardAvoidingView>
     </LinearGradient>
