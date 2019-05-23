@@ -1,26 +1,35 @@
 import React, { Component } from 'react'
 import { View, StyleSheet } from 'react-native'
 import Orientation from 'react-native-orientation'
-import VideoPlayer from 'react-native-video-controls'
+import YouTube from 'react-native-youtube'
 
-class VideoPlayerView extends Component {
+class VideoPlayer extends Component {
   static navigationOptions = {
     header: null,
   }
   componentWillMount() {
     Orientation.lockToLandscape()
   }
-  back = () => {
-    Orientation.lockToPortrait()
-    this.props.navigation.goBack()
+  componentWillUnmount() {
+    Orientation.lockToLandscape()
+    //this.props.navigation.goBack()
   }
   render() {
+    const { navigation } = this.props
+    const trailer = navigation.getParam('trailer', 'no-id')
     return (
       <View style={styles.container}>
-        <VideoPlayer
-          source={{ uri: 'https://vjs.zencdn.net/v/oceans.mp4' }}
-          title={this.props.title}
-          onBack={() => this.back()}
+        <YouTube
+          loop={true} // control whether the video should loop when ended
+          play={true} // control playback of video with true/false
+          fullscreen={true} // control whether the video should play in fullscreen or inline
+          videoId={trailer.youtubeId} // The YouTube video ID
+          apiKey="AIzaSyCcZnbyUsU-w6CvdaxdsTgyt1Moni7-3cg"
+          onReady={e => this.setState({ isReady: true })}
+          onChangeState={e => this.setState({ status: e.state })}
+          onChangeQuality={e => this.setState({ quality: e.quality })}
+          onError={e => this.setState({ error: e.error })}
+          style={{ alignSelf: 'stretch', height: 300 }}
         />
       </View>
     )
@@ -33,4 +42,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default VideoPlayerView
+export default VideoPlayer

@@ -5,7 +5,6 @@ import { Flex, FlexItem } from './style'
 import Title from '../../components/Title'
 import { Avatar } from 'react-native-elements'
 import { DATA } from '../../../../data'
-import { UserList } from '../../components/List'
 
 const Profile = ({ navigation }) => {
   return (
@@ -68,7 +67,6 @@ const Profile = ({ navigation }) => {
             textAlign="center"
           />
         </Flex>
-        <UserList item={DATA.movies} onPress={navigation} />
       </Container>
     </ScrollView>
   )

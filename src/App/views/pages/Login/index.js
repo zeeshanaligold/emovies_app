@@ -7,6 +7,8 @@ import { styles } from '../../../assets/styles'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { login } from '../../../redux/actions'
+import client from '../../../graphql/client'
+import { SIGN_IN } from '../../../graphql/queries'
 
 const { width, height } = Dimensions.get('window')
 
@@ -56,8 +58,18 @@ const Login = ({ loginToReducer }) => {
   const [userName, setUserName] = useState('')
   const [userPassword, setUserPassword] = useState('')
 
-  const handleClick = () => {
-    if (userName === 'admin' && userPassword === 'admin') {
+  const handleClick = async () => {
+    await client
+      .mutate({
+        mutation: SIGN_IN,
+        variables: { username: userName, password: userPassword },
+      })
+      .then(({ data }) => {
+        consloe.log(data.tokenAuth.token)
+      })
+      .catch(error => console.log(error.graphQLErrors))
+
+    /* if (userName === 'admin' && userPassword === 'admin') {
       loginToReducer({ userName: userName })
     } else {
       // Works on both iOS and Android
@@ -74,7 +86,7 @@ const Login = ({ loginToReducer }) => {
         ],
         { cancelable: false }
       )
-    }
+    } */
   }
 
   handleFaceBook = () => {

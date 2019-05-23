@@ -15,7 +15,7 @@ import IntroSlider from './views/components/IntroSlider'
 import SplashScreen from 'react-native-splash-screen'
 
 const App = ({ isLoggedIn }) => {
-  const [showLauncher, setShowLauncher] = useState(true)
+  const [showLauncher, setShowLauncher] = useState(false)
 
   useEffect(() => {
     SplashScreen.hide()

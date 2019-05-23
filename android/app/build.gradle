@@ -138,9 +138,9 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-youtube')
     implementation project(':react-native-fbsdk')
     implementation project(':react-native-splash-screen')
-    implementation project(':react-native-video')
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-reanimated')
     implementation project(':react-native-orientation')
