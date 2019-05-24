@@ -1,88 +1,101 @@
-import React, { Component } from 'react'
-import { View, TouchableOpacity, FlatList, Text } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { TouchableOpacity, FlatList, View, Text, Dimensions, ActivityIndicator } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { styles } from '../../../assets/styles'
-import { Poster } from '../Image'
+import { GET_MOVIES } from '../../../graphql/queries'
+import client from '../../../graphql/client'
+import Frame from '../Image'
 import Title from '../Title'
 
-class List extends Component {
-  constructor(props) {
-    super(props)
+// screen sizing
+const { width, height } = Dimensions.get('window')
+// orientation must fixed
+const SCREEN_WIDTH = width < height ? width : height
+// const SCREEN_HEIGHT = width < height ? height : width;
+const isSmallDevice = SCREEN_WIDTH <= 414
+const numColumns = isSmallDevice ? 2 : 3
+const ITEM_MARGIN = 20
+
+const List = ({ onPress }) => {
+  const [first, setFirst] = useState(10)
+  const [skip, setSkip] = useState(0)
+  const [movies, setMovies] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+
+  handleLoadMore = async () => {
+    setIsLoading(true)
+
+    await client
+      .query({
+        query: GET_MOVIES,
+        variables: {
+          first: first,
+          skip: skip,
+        },
+      })
+      .then(({ data }) => {
+        setSkip(skip + first)
+        setMovies([...movies, ...data.movies])
+        setIsLoading(false)
+      })
+      .catch(error => console.log(error))
   }
 
-  render() {
-    const _renderItem = item => {
-      return (
-        <View key={item.key} style={item.key % 2 == 0 ? { marginRight: 20 } : { margin: 0 }}>
-          <TouchableOpacity
-            onPress={() => this.props.onPress.navigate('Details', { movieId: item.key })}
-          >
-            <Poster width="150px" height="230px" type="list" source={{ uri: item.image }} />
-          </TouchableOpacity>
-          <LinearGradient
-            style={styles.ListIconRating}
-            colors={['#F99F00', '#DB3069']}
-            start={{ x: 0, y: 0.1 }}
-            end={{ x: 0.1, y: 1 }}
-          >
-            <Title text="9.8" textColor="yellow" lineHeight="22px" fontSize="16px" />
-          </LinearGradient>
-          <Text style={styles.movieListTitle}>{this.props.name}</Text>
-        </View>
-      )
-    }
+  useEffect(() => {
+    handleLoadMore()
+  }, [])
 
-    return (
-      <View style={{ flex: 1, justifyContent: 'space-between', flexWrap: 'wrap' }}>
-        <FlatList
-          data={this.props.item}
-          horizontal={false}
-          numColumns={2}
-          ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
-          renderItem={({ item }) => _renderItem(item)}
-          keyExtractor={item => item.key.toString()}
+  return (
+    <FlatList
+      numColumns={numColumns}
+      data={movies}
+      renderItem={({ item }) => (
+        <Card
+          item={item}
+          onPress={onPress}
+          itemWidth={(SCREEN_WIDTH - ITEM_MARGIN * numColumns) / 2}
         />
-      </View>
-    )
-  }
+      )}
+      onEndReachedThreshold={0.5}
+      keyExtractor={(item, index) => index.toString()}
+      onEndReached={handleLoadMore}
+      ListFooterComponent={() => {
+        return (
+          isLoading && (
+            <View style={{ flex: 1, padding: 10 }}>
+              <ActivityIndicator size="small" />
+            </View>
+          )
+        )
+      }}
+    />
+  )
 }
 
-export class UserList extends Component {
-  render() {
-    const _renderItem = item => {
-      return (
-        <View
-          key={item.key}
-          style={
-            item.key % 2 !== 0
-              ? { marginRight: 5 }
-              : Math.ceil(item.key % 3) === 0
-              ? { margin: 0 }
-              : { marginRight: 5 }
-          }
+const Card = ({ item, itemWidth, onPress }) => {
+  const { id, title, avgRating } = item
+  return (
+    <TouchableOpacity onPress={() => onPress.navigate('Details', { movieId: id })}>
+      <Frame
+        type="list"
+        height="230px"
+        width={itemWidth}
+        src={{
+          uri: `https://res.cloudinary.com/emovies/image/upload/v1554090936/posters/${id}.jpg`,
+        }}
+      >
+        <LinearGradient
+          style={styles.ListIconRating}
+          colors={['#F99F00', '#DB3069']}
+          start={{ x: 0, y: 0.1 }}
+          end={{ x: 0.1, y: 1 }}
         >
-          <TouchableOpacity
-            onPress={() => this.props.onPress.navigate('Details', { movieId: item.key })}
-          >
-            <Poster width="75px" height="113px" type="userlist" source={{ uri: item.image }} />
-          </TouchableOpacity>
-        </View>
-      )
-    }
-    return (
-      <View style={{ flex: 1 }}>
-        <FlatList
-          horizontal={false}
-          numColumns={4}
-          data={this.props.item}
-          ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-          contentContainerStyle={styles.list}
-          renderItem={({ item }) => _renderItem(item)}
-          keyExtractor={item => item.key.toString()}
-        />
-      </View>
-    )
-  }
+          <Title text={avgRating.toFixed(1)} textColor="#fff" lineHeight="22px" fontSize="16px" />
+        </LinearGradient>
+        <Text style={styles.movieListTitle}>{title}</Text>
+      </Frame>
+    </TouchableOpacity>
+  )
 }
 
 export default List

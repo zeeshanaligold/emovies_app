@@ -2,7 +2,7 @@ import { USER_LOGIN, USER_LOGOUT } from '../constants'
 
 const INITIAL_STATE = {
   loggedUser: null,
-  isLoggedIn: false,
+  isLoggedIn: true,
 }
 
 export const user = (state = INITIAL_STATE, action) => {

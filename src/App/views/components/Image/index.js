@@ -18,21 +18,21 @@ export const Image = ({ source, ...rest }) => (
   </ImageWrapper>
 )
 
-const Frame = styled.View`
+const Container = styled.View`
   elevation: 12;
   shadow-color: #000;
-  border-radius: 10px;
-  shadow-opacity: 0.5;
   shadow-radius: 8px;
   shadow-offset: 2px;
+  border-radius: 10px;
+  shadow-opacity: 0.5;
+  margin: 0 10px 20px;
 `
-export const Poster = props => (
-  <Frame type={props.type}>
-    <StyledImage
-      width={props.width}
-      height={props.height}
-      source={props.source}
-      borderRadius={10}
-    />
-  </Frame>
+
+const Frame = ({ children, width, height, src }) => (
+  <Container>
+    <StyledImage width={width} height={height} source={src} borderRadius={10} />
+    {children}
+  </Container>
 )
+
+export default Frame

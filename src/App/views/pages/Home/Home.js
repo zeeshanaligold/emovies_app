@@ -55,7 +55,7 @@ const Home = ({ navigation }) => {
             })
           }
         />
-        <List item={DATA.movies} onPress={navigation} />
+        <List onPress={navigation} />
       </Container>
     </ScrollView>
   )
