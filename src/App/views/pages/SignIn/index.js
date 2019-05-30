@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { withNavigation } from 'react-navigation'
 import { LoginManager } from 'react-native-fbsdk'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import { KeyboardAvoidingView, Image, Dimensions, Alert } from 'react-native'
+import { KeyboardAvoidingView, Image, Dimensions, Alert, Text } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { styles } from '../../../assets/styles'
 import styled from 'styled-components'
-import { connect } from 'react-redux'
-import { login } from '../../../redux/actions'
 import client from '../../../graphql/client'
 import { SIGN_IN } from '../../../graphql/queries'
+import { saveKey, getKey } from '../../../services/deviceStorage'
 
 const { width, height } = Dimensions.get('window')
 
@@ -31,7 +31,11 @@ const Input = styled.TextInput`
   border-radius: 50px;
   background-color: rgba(225, 225, 225, 0.2);
 `
-
+const StyledText = styled.Text`
+  color: #fff;
+  font-size: 15px;
+  margin-top: 20px;
+`
 const Button = styled.TouchableOpacity`
   width: 300px;
   height: 50px;
@@ -54,7 +58,7 @@ const FacebookButton = styled(Button)`
   text-align: center;
   background-color: #3b5998;
 `
-const Login = ({ loginToReducer }) => {
+const SignIn = ({ navigation }) => {
   const [userName, setUserName] = useState('')
   const [userPassword, setUserPassword] = useState('')
 
@@ -65,28 +69,14 @@ const Login = ({ loginToReducer }) => {
         variables: { username: userName, password: userPassword },
       })
       .then(({ data }) => {
-        consloe.log(data.tokenAuth.token)
+        saveKey('user_token', data.tokenAuth.token)
+        navigation.navigate('Home')
       })
-      .catch(error => console.log(error.graphQLErrors))
-
-    /* if (userName === 'admin' && userPassword === 'admin') {
-      loginToReducer({ userName: userName })
-    } else {
-      // Works on both iOS and Android
-      Alert.alert(
-        'Authentication Failed',
-        'Please enter a valid username and password!',
-        [
-          {
-            text: 'Cancel',
-            onPress: () => console.log('Cancel Pressed'),
-            style: 'cancel',
-          },
+      .catch(error => {
+        Alert.alert('Authentication Failed', error.graphQLErrors[0].message, [
           { text: 'OK', onPress: () => console.log('OK Pressed') },
-        ],
-        { cancelable: false }
-      )
-    } */
+        ])
+      })
   }
 
   handleFaceBook = () => {
@@ -103,6 +93,14 @@ const Login = ({ loginToReducer }) => {
       }
     )
   }
+
+  useEffect(() => {
+    getKey('user_token').then(value => {
+      if (value !== null) {
+        navigation.navigate('Home')
+      }
+    })
+  }, [])
 
   return (
     <LinearGradient
@@ -137,31 +135,24 @@ const Login = ({ loginToReducer }) => {
             placeholder="Password"
             placeholderTextColor="rgba(225,225,225,0.7)"
             onChangeText={text => setUserPassword(text)}
-            onSubmitEditing={handleClick}
+            onSubmitEditing={() => handleClick()}
             secureTextEntry={true}
           />
-          <Button text="Login" onPress={handleClick}>
-            <ButtonText>Login</ButtonText>
+          <Button text="Sign In" onPress={() => handleClick()}>
+            <ButtonText>Sign In</ButtonText>
           </Button>
-          <FacebookButton onPress={handleFaceBook}>
+          <FacebookButton onPress={() => handleFaceBook()}>
             <Icon name="facebook" size={30} style={{ marginRight: 10 }} color={'white'} />
             <ButtonText>Continue with Facebook</ButtonText>
           </FacebookButton>
+          <StyledText>
+            {`Don't have an account? `}
+            <Text onPress={() => navigation.navigate('SignUp')}>Sign Up</Text>
+          </StyledText>
         </Container>
       </KeyboardAvoidingView>
     </LinearGradient>
   )
 }
 
-let mapDispatchToProp = dispatch => {
-  return {
-    loginToReducer: user => {
-      dispatch(login(user))
-    },
-  }
-}
-
-export default connect(
-  null,
-  mapDispatchToProp
-)(Login)
+export default withNavigation(SignIn)
