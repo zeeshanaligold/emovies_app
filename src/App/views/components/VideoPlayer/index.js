@@ -5,14 +5,13 @@ import YouTube from 'react-native-youtube'
 
 class VideoPlayer extends Component {
   static navigationOptions = {
-    header: null,
+    title: 'Back',
   }
   componentWillMount() {
     Orientation.lockToLandscape()
   }
   componentWillUnmount() {
-    Orientation.lockToLandscape()
-    //this.props.navigation.goBack()
+    Orientation.lockToPortrait()
   }
   render() {
     const { navigation } = this.props
