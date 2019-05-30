@@ -11,23 +11,9 @@ const Home = ({ navigation }) => {
   return (
     <ScrollView>
       <Container>
-        <Title
-          text="MOVIES"
-          textColor="#666"
-          lineHeight="24px"
-          textAlign="left"
-          fontSize="18px"
-          margin="10px 0"
-          onPress={() =>
-            navigation.navigate('Genres', {
-              genre: 'movies',
-              title: 'All movies list',
-            })
-          }
-        />
         <CoverFlow item={DATA.movies} />
         <Title
-          text="New"
+          text="New Movies"
           textColor="#666"
           lineHeight="24px"
           textAlign="left"
@@ -35,14 +21,14 @@ const Home = ({ navigation }) => {
           margin="10px 0"
           onPress={() =>
             navigation.navigate('Genres', {
-              genre: 'movies',
-              title: 'All movies list',
+              type: 'new',
+              title: 'New Movies',
             })
           }
         />
         <HorizontalList item={DATA.movies} />
         <Title
-          text="Popular"
+          text="Trending Movies"
           textColor="#666"
           lineHeight="24px"
           textAlign="left"
@@ -50,8 +36,23 @@ const Home = ({ navigation }) => {
           margin="10px 0"
           onPress={() =>
             navigation.navigate('Genres', {
-              genre: 'movies',
-              title: 'All movies list',
+              type: 'trending',
+              title: 'Trending Movies',
+            })
+          }
+        />
+        <HorizontalList item={DATA.movies} />
+        <Title
+          text="Popular Movies"
+          textColor="#666"
+          lineHeight="24px"
+          textAlign="left"
+          fontSize="18px"
+          margin="10px 0"
+          onPress={() =>
+            navigation.navigate('Genres', {
+              type: 'popular',
+              title: 'Popular Movies',
             })
           }
         />
