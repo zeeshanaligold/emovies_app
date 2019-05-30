@@ -8,13 +8,11 @@
 
 import React, { useState, useEffect } from 'react'
 import { View } from 'react-native'
-import { connect } from 'react-redux'
-import Login from './views/pages/Login'
 import Navigation from './views/layouts/Navigation'
 import IntroSlider from './views/components/IntroSlider'
 import SplashScreen from 'react-native-splash-screen'
 
-const App = ({ isLoggedIn }) => {
+const App = () => {
   const [showLauncher, setShowLauncher] = useState(false)
 
   useEffect(() => {
@@ -26,7 +24,6 @@ const App = ({ isLoggedIn }) => {
       {!showLauncher ? (
         <View style={{ flex: 1 }}>
           <Navigation />
-          {!isLoggedIn && <Login />}
         </View>
       ) : (
         <IntroSlider onDone={() => setShowLauncher(false)} />
@@ -35,13 +32,4 @@ const App = ({ isLoggedIn }) => {
   )
 }
 
-let mapStateToProp = state => {
-  return {
-    isLoggedIn: state.user.isLoggedIn,
-  }
-}
-
-export default connect(
-  mapStateToProp,
-  null
-)(App)
+export default App
