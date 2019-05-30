@@ -20,8 +20,8 @@ const ITEM_MARGIN = 20
 const List = ({ onPress }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  handleLoadMore = async () => {
-    dispatch({ type: 'LOADING', payload: { isLoading: true } })
+  const handleLoadMore = async () => {
+    dispatch({ type: 'UPDATE_STATE', payload: { isLoading: true } })
     const { first, skip, movies } = state
     await client
       .query({
@@ -33,7 +33,7 @@ const List = ({ onPress }) => {
       })
       .then(({ data }) => {
         dispatch({
-          type: 'SET_MOVIES',
+          type: 'UPDATE_STATE',
           payload: {
             skip: skip + first,
             movies: [...movies, ...data.movies],
@@ -45,7 +45,11 @@ const List = ({ onPress }) => {
   }
 
   useEffect(() => {
-    handleLoadMore()
+    let isSubscribed = true
+    if (isSubscribed) {
+      handleLoadMore()
+    }
+    return () => (isSubscribed = false)
   }, [])
 
   return (
@@ -59,9 +63,18 @@ const List = ({ onPress }) => {
           itemWidth={(SCREEN_WIDTH - ITEM_MARGIN * numColumns) / 2}
         />
       )}
+      initialNumToRender={10}
       onEndReachedThreshold={0.5}
       keyExtractor={(item, index) => index.toString()}
-      onEndReached={() => handleLoadMore()}
+      onEndReached={x => {
+        if (!state.onEndReachedCalledDuringMomentum) {
+          handleLoadMore()
+          dispatch({ type: 'UPDATE_STATE', payload: { onEndReachedCalledDuringMomentum: true } })
+        }
+      }}
+      onMomentumScrollBegin={() => {
+        dispatch({ type: 'UPDATE_STATE', payload: { onEndReachedCalledDuringMomentum: false } })
+      }}
       ListFooterComponent={() => {
         return (
           state.isLoading && (

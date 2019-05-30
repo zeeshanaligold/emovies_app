@@ -3,13 +3,12 @@ export const initialState = {
   skip: 0,
   movies: [],
   isLoading: false,
+  onEndReachedCalledDuringMomentum: false,
 }
 
 export const reducer = (state, action) => {
   switch (action.type) {
-    case 'LOADING':
-      return { ...state, ...action.payload }
-    case 'SET_MOVIES':
+    case 'UPDATE_STATE':
       return { ...state, ...action.payload }
     default:
       throw new Error('Unexpected action')

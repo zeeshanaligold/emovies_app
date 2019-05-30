@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import Title from '../../components/Title'
 import Container from '../../components/Container'
 import List from '../../components/List'
-import { DATA } from '../../../../data'
 
 class Genres extends Component {
   render() {
@@ -18,7 +17,7 @@ class Genres extends Component {
           fontSize="24px"
           margin="10px"
         />
-        <List item={DATA.movies} onPress={navigation} />
+        <List onPress={navigation} />
       </Container>
     )
   }
