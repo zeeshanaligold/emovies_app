@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useReducer, useEffect } from 'react'
 import { TouchableOpacity, FlatList, View, Text, Dimensions, ActivityIndicator } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
+import { reducer, initialState } from './reducer'
 import { styles } from '../../../assets/styles'
 import { GET_MOVIES } from '../../../graphql/queries'
 import client from '../../../graphql/client'
@@ -17,14 +18,11 @@ const numColumns = isSmallDevice ? 2 : 3
 const ITEM_MARGIN = 20
 
 const List = ({ onPress }) => {
-  const [first, setFirst] = useState(10)
-  const [skip, setSkip] = useState(0)
-  const [movies, setMovies] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   handleLoadMore = async () => {
-    setIsLoading(true)
-
+    dispatch({ type: 'LOADING', payload: { isLoading: true } })
+    const { first, skip, movies } = state
     await client
       .query({
         query: GET_MOVIES,
@@ -34,9 +32,14 @@ const List = ({ onPress }) => {
         },
       })
       .then(({ data }) => {
-        setSkip(skip + first)
-        setMovies([...movies, ...data.movies])
-        setIsLoading(false)
+        dispatch({
+          type: 'SET_MOVIES',
+          payload: {
+            skip: skip + first,
+            movies: [...movies, ...data.movies],
+            isLoading: false,
+          },
+        })
       })
       .catch(error => console.log(error))
   }
@@ -48,7 +51,7 @@ const List = ({ onPress }) => {
   return (
     <FlatList
       numColumns={numColumns}
-      data={movies}
+      data={state.movies}
       renderItem={({ item }) => (
         <Card
           item={item}
@@ -58,10 +61,10 @@ const List = ({ onPress }) => {
       )}
       onEndReachedThreshold={0.5}
       keyExtractor={(item, index) => index.toString()}
-      onEndReached={handleLoadMore}
+      onEndReached={() => handleLoadMore()}
       ListFooterComponent={() => {
         return (
-          isLoading && (
+          state.isLoading && (
             <View style={{ flex: 1, padding: 10 }}>
               <ActivityIndicator size="small" />
             </View>
