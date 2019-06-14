@@ -1,11 +1,11 @@
 import React, { useReducer } from 'react'
 import { withNavigation } from 'react-navigation'
-import { KeyboardAvoidingView, Dimensions, Alert } from 'react-native'
+import { KeyboardAvoidingView, Dimensions, Alert, Text } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { styles } from '../../../assets/styles'
 import styled from 'styled-components'
 import client from '../../../graphql/client'
-import { SIGN_UP } from '../../../graphql/queries'
+import { SIGN_UP } from '../../../graphql/mutations'
 import { reducer, initialState } from './reducer'
 
 const { width, height } = Dimensions.get('window')
@@ -45,6 +45,11 @@ const Title = styled.Text`
   font-size: 40px;
   font-weight: bold;
   margin-bottom: 30px;
+`
+const StyledText = styled.Text`
+  color: #fff;
+  font-size: 15px;
+  margin-top: 20px;
 `
 const SignUp = ({ navigation }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -142,6 +147,10 @@ const SignUp = ({ navigation }) => {
           <Button text="Register" onPress={() => handleRegister()}>
             <ButtonText>Sign Up</ButtonText>
           </Button>
+          <StyledText>
+            {`Already have an account? `}
+            <Text onPress={() => navigation.navigate('SignIn')}>Sign In</Text>
+          </StyledText>
         </Container>
       </KeyboardAvoidingView>
     </LinearGradient>

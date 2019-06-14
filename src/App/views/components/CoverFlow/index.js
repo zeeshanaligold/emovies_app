@@ -81,14 +81,16 @@ class CoverFlow extends Component {
 
   render() {
     return (
-      <TabView
-        style={[this.props.style]}
-        sceneContainerStyle={styles.scene}
-        navigationState={this.state}
-        renderTabBar={this._renderTabBar}
-        renderScene={this._renderScene}
-        onIndexChange={this._handleIndexChange}
-      />
+      <View style={{ flex: 1, marginTop: 20 }}>
+        <TabView
+          style={[this.props.style]}
+          sceneContainerStyle={styles.scene}
+          navigationState={this.state}
+          renderTabBar={this._renderTabBar}
+          renderScene={this._renderScene}
+          onIndexChange={this._handleIndexChange}
+        />
+      </View>
     )
   }
 }

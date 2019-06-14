@@ -58,43 +58,17 @@ export const styles = StyleSheet.create({
     height: 200,
     borderRadius: 10,
   },
-
-  /* Poster */
-  list: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  posterWrapper: {
-    elevation: 12,
-    shadowColor: '#000000',
-    borderRadius: 10,
-    shadowOpacity: 0.5,
-    shadowRadius: 8,
-    shadowOffset: {
-      height: 8,
-    },
-  },
-  posterImage: {
-    width: 170,
-    height: 250,
-    borderRadius: 10,
-  },
   /* Rating Icon */
   ListIconRating: {
     width: 30,
     height: 30,
-    borderRadius: 30,
-    marginTop: 25,
-    marginLeft: 100,
     padding: 3,
-    position: 'absolute',
+    borderRadius: 30,
+    alignSelf: 'flex-end',
   },
   movieListTitle: {
-    marginTop: 200,
-    marginLeft: 5,
-    color: '#fff',
     padding: 3,
-    position: 'absolute',
+    color: '#fff',
   },
   genreIconRating: {
     width: 25,
@@ -114,12 +88,7 @@ export const styles = StyleSheet.create({
   },
   /* Detail css */
   detailHeader: {
+    flex: 1,
     width: '100%',
-  },
-  ButtonIcon: {
-    position: 'relative',
-    marginTop: 12,
-    marginLeft: 16,
-    color: '#fff',
   },
 })

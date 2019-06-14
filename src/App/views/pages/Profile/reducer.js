@@ -1,17 +1,14 @@
 export const initialState = {
-  first: 10,
-  skip: 0,
-  movies: [],
-  numColumns: 2,
-  screenWidth: 0,
-  isLoading: false,
-  search: null,
-  onEndReachedCalledDuringMomentum: false,
+  firstName: '',
+  lastName: '',
+  username: '',
+  password: '',
+  isProgress: false,
 }
 
 export const reducer = (state, action) => {
   switch (action.type) {
-    case 'UPDATE_STATE':
+    case 'SET_DETAILS':
       return { ...state, ...action.payload }
     default:
       throw new Error('Unexpected action')

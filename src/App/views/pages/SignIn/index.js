@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { withNavigation } from 'react-navigation'
 import { LoginManager } from 'react-native-fbsdk'
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -7,7 +7,8 @@ import LinearGradient from 'react-native-linear-gradient'
 import { styles } from '../../../assets/styles'
 import styled from 'styled-components'
 import client from '../../../graphql/client'
-import { SIGN_IN } from '../../../graphql/queries'
+import { SIGN_IN } from '../../../graphql/mutations'
+import ThemeContext from '../../../Contexts'
 import { saveKey, getKey } from '../../../services/deviceStorage'
 
 const { width, height } = Dimensions.get('window')
@@ -61,6 +62,7 @@ const FacebookButton = styled(Button)`
 const SignIn = ({ navigation }) => {
   const [userName, setUserName] = useState('')
   const [userPassword, setUserPassword] = useState('')
+  const { handleProfile } = useContext(ThemeContext)
 
   const handleClick = async () => {
     await client
@@ -71,6 +73,7 @@ const SignIn = ({ navigation }) => {
       .then(({ data }) => {
         saveKey('user_token', data.tokenAuth.token)
         navigation.navigate('Home')
+        handleProfile()
       })
       .catch(error => {
         Alert.alert('Authentication Failed', error.graphQLErrors[0].message, [
@@ -85,6 +88,7 @@ const SignIn = ({ navigation }) => {
         if (result.isCancelled) {
           console.log('Login cancelled')
         } else {
+          console.log(result)
           console.log(`Login success with permissions:  ${result.grantedPermissions.toString()}`)
         }
       },

@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 
 export const GET_MOVIES = gql`
-  query GetMovies($first: Int, $skip: Int) {
-    movies(first: $first, skip: $skip) {
+  query GetMovies($first: Int, $skip: Int, $search: String, $category: String, $movieId: Int) {
+    movies(first: $first, skip: $skip, search: $search, category: $category, movieId: $movieId) {
       id
       title
       genres
@@ -24,35 +24,31 @@ export const GET_MOVIE = gql`
         tmdbId
       }
       avgRating
+      totalRating
     }
   }
 `
-// mutations
-export const SIGN_IN = gql`
-  mutation loginUser($username: String!, $password: String!) {
-    tokenAuth(username: $username, password: $password) {
-      token
+export const GET_REVIEWS = gql`
+  query GetReviews($movieId: Int!, $rating: Float, $first: Int, $skip: Int) {
+    reviews(movieId: $movieId, rating: $rating, first: $first, skip: $skip) {
+      id
+      userId
+      rating
+      comment
+      timestamp
     }
   }
 `
-export const SIGN_UP = gql`
-  mutation signUpUser(
-    $email: String!
-    $firstName: String!
-    $lastName: String!
-    $username: String!
-    $password: String!
-  ) {
-    createUser(
-      input: {
-        email: $email
-        username: $username
-        password: $password
-        lastName: $lastName
-        firstName: $firstName
-      }
-    ) {
-      status
+export const GET_LOGGED_USER = gql`
+  query loggedUser {
+    me {
+      id
+      email
+      username
+      firstName
+      lastName
+      lastLogin
+      isStaff
     }
   }
 `

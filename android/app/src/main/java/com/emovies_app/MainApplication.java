@@ -13,7 +13,6 @@ import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
-import com.swmansion.reanimated.ReanimatedPackage;
 import com.github.yamill.orientation.OrientationPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
@@ -48,7 +47,6 @@ public class MainApplication extends Application implements ReactApplication {
             new FBSDKPackage(mCallbackManager),
             new SplashScreenReactPackage(),
             new VectorIconsPackage(),
-            new ReanimatedPackage(),
             new OrientationPackage(),
             new LinearGradientPackage(),
             new RNGestureHandlerPackage()

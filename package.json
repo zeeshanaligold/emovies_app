@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "react-devtools": "react-devtools",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest"
   },
@@ -11,6 +12,8 @@
     "apollo-boost": "^0.3.1",
     "graphql": "^14.3.0",
     "graphql-tag": "^2.10.1",
+    "hoist-non-react-statics": "^3.3.0",
+    "moment": "^2.24.0",
     "react": "16.8.3",
     "react-apollo": "^2.5.5",
     "react-native": "0.59.5",
@@ -19,10 +22,10 @@
     "react-native-fbsdk": "^0.8.0",
     "react-native-gesture-handler": "^1.1.0",
     "react-native-linear-gradient": "^2.5.4",
+    "react-native-loading-spinner-overlay": "^1.0.1",
     "react-native-orientation": "^3.1.3",
-    "react-native-reanimated": "^1.0.1",
+    "react-native-snap-carousel": "^3.8.0",
     "react-native-splash-screen": "^3.2.0",
-    "react-native-tab-view": "^2.2.0",
     "react-native-vector-icons": "^6.4.2",
     "react-native-youtube": "^1.1.0",
     "react-navigation": "^3.9.1",
@@ -34,6 +37,7 @@
     "babel-jest": "^24.7.1",
     "jest": "^24.7.1",
     "metro-react-native-babel-preset": "^0.53.1",
+    "react-devtools": "^3.6.1",
     "react-test-renderer": "16.8.3"
   },
   "jest": {
