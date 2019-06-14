@@ -19,7 +19,7 @@ const SignInStack = createStackNavigator(
   {
     Home: {
       screen: Home,
-      navigationOptions: ({ navigation }) => ({
+      navigationOptions: ({ navigation, screenProps }) => ({
         headerLeft: (
           <Icon
             size={30}
@@ -31,10 +31,9 @@ const SignInStack = createStackNavigator(
         headerRight: (
           <Avatar
             rounded
-            size="small"
-            activeOpacity={0.9}
-            containerStyle={{ marginRight: 10 }}
-            source={require('../../../assets/images/default-profile.png')}
+            size="medium"
+            source={{ uri: `https://i.pravatar.cc/150?u=${screenProps.id}` }}
+            containerStyle={{ marginRight: 10, borderColor: '#DB3069', borderWidth: 2 }}
           />
         ),
       }),

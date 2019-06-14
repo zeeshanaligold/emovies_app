@@ -7,6 +7,7 @@ import LinearGradient from 'react-native-linear-gradient'
 import { SafeAreaView } from 'react-navigation'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { deleteKey } from '../../../services/deviceStorage'
+import { withTheme } from '../../../Contexts'
 
 const Container = styled.View`
   flex: 1;
@@ -31,17 +32,18 @@ const List = styled.Text`
     border-left-width: 5px;
     border-left-color: #db3069;`}
 `
-const DrawerHeader = ({ name, avatar }) => (
+const DrawerHeader = ({ firstName, lastName, id }) => (
   <LinearGradient style={[{ flex: 1, height: 170 }]} colors={['#F99F00', '#DB3069']}>
     <Container>
       <Avatar
         rounded
         size="large"
-        source={avatar}
         activeOpacity={0.7}
         containerStyle={{ marginBottom: 15 }}
+        source={{ uri: `https://i.pravatar.cc/150?u=${id}` }}
+        containerStyle={{ borderColor: '#ccc', borderWidth: 5 }}
       />
-      <AvatarName>{name}</AvatarName>
+      <AvatarName>{firstName + ' ' + lastName}</AvatarName>
     </Container>
   </LinearGradient>
 )
@@ -54,7 +56,7 @@ const routes = [
   },
 ]
 
-const Drawer = ({ navigation }) => {
+const Drawer = ({ navigation, profile }) => {
   const handleNavigate = screen => {
     navigation.navigate(screen)
   }
@@ -75,7 +77,7 @@ const Drawer = ({ navigation }) => {
   return (
     <ScrollView>
       <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
-        <DrawerHeader name="Admin" avatar={require('../../../assets/images/default-profile.png')} />
+        <DrawerHeader {...profile} />
         {renderRoutes()}
         <List onPress={() => handleLogout()}>
           <Icon name="sign-out" size={22} />
@@ -86,4 +88,4 @@ const Drawer = ({ navigation }) => {
   )
 }
 
-export default Drawer
+export default withTheme(Drawer)
