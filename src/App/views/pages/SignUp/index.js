@@ -67,7 +67,7 @@ const SignUp = ({ navigation }) => {
       .then(({ data }) => {
         if (data.createUser.status === true) {
           Alert.alert('Registration Successful', '', [
-            { text: 'Continue to login', onPress: () => navigation.navigate('Login') },
+            { text: 'Continue to login', onPress: () => navigation.navigate('SignIn') },
           ])
         }
       })
