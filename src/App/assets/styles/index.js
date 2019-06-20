@@ -60,9 +60,9 @@ export const styles = StyleSheet.create({
   },
   /* Rating Icon */
   ListIconRating: {
-    width: 30,
-    height: 30,
-    padding: 3,
+    width: 35,
+    height: 35,
+    padding: 4,
     borderRadius: 30,
     alignSelf: 'flex-end',
   },
