@@ -9,6 +9,7 @@ import Details from '../../pages/Details'
 import Contact from '../../pages/Contact'
 import Reviews from '../../pages/Reviews'
 import Edit from '../../pages/Profile/Edit'
+import Subscription from '../../pages/Subscription'
 import VideoPlayer from '../../components/VideoPlayer'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { styles } from '../../../assets/styles'
@@ -52,6 +53,9 @@ const SignInStack = createStackNavigator(
     },
     PlayVideo: {
       screen: VideoPlayer,
+    },
+    Subscription: {
+      screen: Subscription,
     },
     Edit: {
       screen: Edit,
