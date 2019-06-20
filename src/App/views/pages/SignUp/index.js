@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import client from '../../../graphql/client'
 import { SIGN_UP } from '../../../graphql/mutations'
 import { reducer, initialState } from './reducer'
-
+import { withTheme } from '../../../Contexts'
 const { width, height } = Dimensions.get('window')
 
 const Container = styled.View`
@@ -51,7 +51,7 @@ const StyledText = styled.Text`
   font-size: 15px;
   margin-top: 20px;
 `
-const SignUp = ({ navigation }) => {
+const SignUp = ({ navigation, setProgress }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   handleChange = (key, value) => {
@@ -59,6 +59,7 @@ const SignUp = ({ navigation }) => {
   }
 
   const handleRegister = async () => {
+    setProgress(true)
     await client
       .mutate({
         mutation: SIGN_UP,
@@ -67,15 +68,17 @@ const SignUp = ({ navigation }) => {
       .then(({ data }) => {
         if (data.createUser.status === true) {
           Alert.alert('Registration Successful', '', [
-            { text: 'Continue to login', onPress: () => navigation.navigate('Login') },
+            { text: 'Continue to login', onPress: () => navigation.navigate('SignIn') },
           ])
         }
       })
       .catch(error => {
-        Alert.alert('Registration Failed', error.graphQLErrors[0].message, [
+        console.log(error)
+        Alert.alert('', 'Username is already in use!', [
           { text: 'OK', onPress: () => console.log('OK Pressed') },
         ])
       })
+    setProgress(false)
   }
 
   return (
@@ -157,4 +160,4 @@ const SignUp = ({ navigation }) => {
   )
 }
 
-export default withNavigation(SignUp)
+export default withTheme(withNavigation(SignUp))

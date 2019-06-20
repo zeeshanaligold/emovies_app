@@ -8,7 +8,7 @@ import { styles } from '../../../assets/styles'
 import styled from 'styled-components'
 import client from '../../../graphql/client'
 import { SIGN_IN } from '../../../graphql/mutations'
-import ThemeContext from '../../../Contexts'
+import { withTheme } from '../../../Contexts'
 import { saveKey, getKey } from '../../../services/deviceStorage'
 
 const { width, height } = Dimensions.get('window')
@@ -59,12 +59,12 @@ const FacebookButton = styled(Button)`
   text-align: center;
   background-color: #3b5998;
 `
-const SignIn = ({ navigation }) => {
+const SignIn = ({ navigation, handleProfile, setProgress }) => {
   const [userName, setUserName] = useState('')
   const [userPassword, setUserPassword] = useState('')
-  const { handleProfile } = useContext(ThemeContext)
 
   const handleClick = async () => {
+    setProgress(true)
     await client
       .mutate({
         mutation: SIGN_IN,
@@ -80,6 +80,7 @@ const SignIn = ({ navigation }) => {
           { text: 'OK', onPress: () => console.log('OK Pressed') },
         ])
       })
+    setProgress(false)
   }
 
   handleFaceBook = () => {
@@ -159,4 +160,4 @@ const SignIn = ({ navigation }) => {
   )
 }
 
-export default withNavigation(SignIn)
+export default withTheme(withNavigation(SignIn))

@@ -19,6 +19,7 @@ import { GET_LOGGED_USER } from './graphql/queries'
 const App = () => {
   const [showLauncher, setShowLauncher] = useState(false)
   const [isLoading, handleLoading] = useState(false)
+  const [isProgress, setProgress] = useState(false)
   const [profile, setProfile] = useState({})
 
   const handleProfile = async () => {
@@ -45,6 +46,8 @@ const App = () => {
         isLoading,
         handleLoading,
         handleProfile,
+        isProgress,
+        setProgress,
       }}
     >
       <View style={{ flex: 1 }}>
@@ -61,6 +64,12 @@ const App = () => {
         visible={isLoading}
         overlayColor="#FFF"
         textContent={'Loading...'}
+        textStyle={{ color: '#DB3069' }}
+      />
+      <Spinner
+        color="#DB3069"
+        visible={isProgress}
+        textContent={'Progress...'}
         textStyle={{ color: '#DB3069' }}
       />
     </Provider>

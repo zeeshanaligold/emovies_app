@@ -1,6 +1,5 @@
 import React, { Component, useState } from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import Spinner from 'react-native-loading-spinner-overlay'
 import {
   View,
   Text,
@@ -9,6 +8,7 @@ import {
   TouchableNativeFeedback,
   KeyboardAvoidingView,
   ScrollView,
+  ActivityIndicator,
   Alert,
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
@@ -88,7 +88,7 @@ class Reviews extends Component {
   }
 
   handleReviews = async () => {
-    //this.setState({isLoading: true})
+    this.setState({ isLoading: true })
     const { first, skip, rating, movieId, reviews } = this.state
     await client
       .query({
@@ -99,6 +99,7 @@ class Reviews extends Component {
           skip,
           rating,
         },
+        fetchPolicy: 'network-only',
       })
       .then(({ data }) => {
         this.setState({
@@ -161,10 +162,19 @@ class Reviews extends Component {
               onEndReachedCalledDuringMomentum: false,
             })
           }}
+          ListFooterComponent={() => {
+            return (
+              this.state.isLoading && (
+                <View style={{ flex: 1, padding: 10 }}>
+                  <ActivityIndicator size="small" />
+                </View>
+              )
+            )
+          }}
         />
         <FeedBack
           movieId={movieId}
-          {...this.props.profile}
+          {...this.props}
           isOpen={this.state.open}
           handleModal={this.handleModal}
         />
@@ -196,10 +206,9 @@ const ReviewItem = ({ userId, name, comment, rating, timestamp }) => (
   />
 )
 
-const FeedBack = ({ isOpen, handleModal, movieId, id }) => {
+const FeedBack = ({ setProgress, isOpen, handleModal, movieId, profile }) => {
   const [rating, setRating] = useState(0)
   const [comment, setComment] = useState('')
-  const [isProgress, setProgress] = useState(false)
 
   const handleRatingFinish = value => {
     setRating(value)
@@ -210,11 +219,9 @@ const FeedBack = ({ isOpen, handleModal, movieId, id }) => {
     await client
       .mutate({
         mutation: RATE_MOVIE,
-        variables: { userId: id, movieId, rating, comment },
+        variables: { userId: profile.id, movieId, rating, comment },
       })
       .then(({ data }) => {
-        console.log(data)
-
         if (data.createReview.status === true) {
           setTimeout(() => {
             setProgress(false)
@@ -222,6 +229,8 @@ const FeedBack = ({ isOpen, handleModal, movieId, id }) => {
         }
       })
       .catch(error => {
+        console.log(error)
+
         Alert.alert('Failed', '', [{ text: 'OK', onPress: () => console.log('OK Pressed') }])
       })
     setTimeout(() => {
@@ -283,13 +292,6 @@ const FeedBack = ({ isOpen, handleModal, movieId, id }) => {
                 backgroundColor: '#DB3069',
               }}
               onPress={() => handleSave()}
-            />
-            <Spinner
-              style={{ marginTop: 100 }}
-              color="#DB3069"
-              visible={isProgress}
-              textContent={'Progress...'}
-              textStyle={{ color: '#DB3069' }}
             />
           </KeyboardAvoidingView>
         </Container>

@@ -11,9 +11,9 @@ import Title from '../Title'
 
 const ITEM_MARGIN = 20
 
-const List = ({ onPress }) => {
+const List = ({ onPress, category }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
-  const { isLoading, handleLoading } = useContext(ThemeContext)
+  const { handleLoading } = useContext(ThemeContext)
 
   const handleLoadMore = async () => {
     const { first, skip, movies, search } = state
@@ -26,6 +26,7 @@ const List = ({ onPress }) => {
           first,
           skip,
           search,
+          category,
         },
       })
       .then(({ data }) => {
@@ -122,7 +123,12 @@ const Card = ({ item, itemWidth, onPress }) => {
           start={{ x: 0, y: 0.1 }}
           end={{ x: 0.1, y: 1 }}
         >
-          <Title text={avgRating.toFixed(1)} textColor="#fff" lineHeight="22px" fontSize="16px" />
+          <Title
+            textColor="#fff"
+            lineHeight="22px"
+            fontSize="16px"
+            text={avgRating ? avgRating.toFixed(1) : 0}
+          />
         </LinearGradient>
         <Text style={styles.movieListTitle}>{title}</Text>
       </Frame>

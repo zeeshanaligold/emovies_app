@@ -10,7 +10,6 @@ import SnapCarousel from '../../components/SnapCarousel'
 const Box = styled.View`
   padding: 10px;
 `
-
 const Home = ({ navigation }) => {
   return (
     <ScrollView>
@@ -26,27 +25,12 @@ const Home = ({ navigation }) => {
             margin="10px 0"
             onPress={() =>
               navigation.navigate('Genres', {
-                type: 'new',
+                category: 'new',
                 title: 'New Movies',
               })
             }
           />
           <HorizontalList category="new" />
-          <Title
-            text="Trending Movies"
-            textColor="#666"
-            lineHeight="24px"
-            textAlign="left"
-            fontSize="18px"
-            margin="0 0 10px"
-            onPress={() =>
-              navigation.navigate('Genres', {
-                type: 'trending',
-                title: 'Trending Movies',
-              })
-            }
-          />
-          <HorizontalList />
         </Box>
         <Title
           text="Popular Movies"
@@ -57,7 +41,7 @@ const Home = ({ navigation }) => {
           margin="10px"
           onPress={() =>
             navigation.navigate('Genres', {
-              type: 'popular',
+              category: 'popular',
               title: 'Popular Movies',
             })
           }
