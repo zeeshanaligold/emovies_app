@@ -54,6 +54,16 @@ const routes = [
     screen: 'Edit',
     icon: 'cogs',
   },
+  {
+    label: ' Subscription',
+    screen: 'Subscription',
+    icon: 'credit-card',
+  },
+  {
+    label: ' About',
+    screen: 'About',
+    icon: 'info-circle',
+  },
 ]
 
 const Drawer = ({ navigation, profile }) => {

@@ -59,3 +59,12 @@ export const RATE_MOVIE = gql`
     }
   }
 `
+
+// Subscription
+export const CHARGES = gql`
+  mutation createSubscription($userId: ID!, $token: String, $plan: String!) {
+    createSubscription(input: { userId: $userId, token: $token, plan: $plan }) {
+      status
+    }
+  }
+`
