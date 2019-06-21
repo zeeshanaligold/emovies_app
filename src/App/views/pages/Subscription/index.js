@@ -10,7 +10,7 @@ import client from '../../../graphql/client'
 import { CHARGES } from '../../../graphql/mutations'
 
 const Container = styled.View`
-  margin: 100px 50px;
+  margin: 50px;
 `
 const PickerContainer = styled.View`
   width: 100%;
@@ -21,7 +21,13 @@ const PickerContainer = styled.View`
   border-radius: 50px;
   border-color: #db3069;
 `
-
+const Price = styled.Text`
+  color: #db3069;
+  font-size: 50px;
+  margin-top: 20px;
+  font-weight: bold;
+  text-align: center;
+`
 const Subscription = ({ profile }) => {
   const [plan, setPlan] = useState('b')
   const [isPending, setStatus] = useState(false)
@@ -70,6 +76,22 @@ const Subscription = ({ profile }) => {
       })
   }
 
+  const amount = plan => {
+    let amt = 0
+    switch (plan) {
+      case 'b':
+        amt = 12
+        break
+      case 's':
+        amt = 15
+        break
+      default:
+        amt = 20
+        break
+    }
+    return amt
+  }
+
   useEffect(() => {
     stripe.setOptions({
       publishableKey: 'pk_test_3LWuo8NEf8uzGHNfoMFCsBUs00tgRzzPPX',
@@ -101,6 +123,7 @@ const Subscription = ({ profile }) => {
           textColor="#DB3069"
           text="HD and Ultra HD availability subject to your Internet service and device capabilities. Not all content available in HD or Ultra HD."
         />
+        <Price>${amount(plan)}</Price>
         <PickerContainer>
           <Picker
             style={{ height: 50 }}
@@ -117,7 +140,7 @@ const Subscription = ({ profile }) => {
           buttonStyle={{
             height: 50,
             width: '100%',
-            marginTop: 20,
+            marginTop: 30,
             borderRadius: 50,
             justifyContent: 'center',
             backgroundColor: '#DB3069',

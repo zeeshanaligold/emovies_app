@@ -15,7 +15,9 @@ import { Provider } from './Contexts'
 import { View } from 'react-native'
 import client from './graphql/client'
 import { GET_LOGGED_USER } from './graphql/queries'
-console.disableYellowBox = true;
+
+console.disableYellowBox = true
+
 const App = () => {
   const [showLauncher, setShowLauncher] = useState(true)
   const [isLoading, handleLoading] = useState(false)
