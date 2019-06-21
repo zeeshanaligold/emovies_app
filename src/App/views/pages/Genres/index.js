@@ -8,14 +8,14 @@ const Genres = ({ navigation }) => {
   return (
     <Container>
       <Title
-        text={navigation.getParam('title', 'no title')}
+        text={navigation.getParam('title')}
         textColor="#666"
         lineHeight="29px"
         textAlign="left"
         fontSize="24px"
         margin="10px"
       />
-      <List onPress={navigation} />
+      <List onPress={navigation} category={navigation.getParam('category')} />
     </Container>
   )
 }
