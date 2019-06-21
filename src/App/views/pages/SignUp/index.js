@@ -67,9 +67,12 @@ const SignUp = ({ navigation, setProgress }) => {
       })
       .then(({ data }) => {
         if (data.createUser.status === true) {
-          Alert.alert('Registration Successful', '', [
-            { text: 'Continue to login', onPress: () => navigation.navigate('SignIn') },
-          ])
+          alert(
+            'We have sent you an email, please confirm your email address to complete registration!'
+          )
+          setTimeout(() => {
+            navigation.navigate('SignIn')
+          }, 1000)
         }
       })
       .catch(error => {
